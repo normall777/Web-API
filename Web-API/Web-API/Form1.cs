@@ -25,7 +25,7 @@ namespace Web_API
         const int bigSalary = 120000;
         const int lowSalary = 15000;
         readonly IRestClient _client = new RestClient(HhApiHost);
-
+        private JArray curr;
         public class listProf
         {
             public listProf()
@@ -37,11 +37,30 @@ namespace Web_API
 
         public Form1()
         {
+
+            /// <summary>
+            /// Для загрузки значения для перевода валют
+            /// </summary>
+            IRestRequest request = new RestRequest(string.Format("https://api.hh.ru/dictionaries"), Method.GET);
+            IRestResponse response = _client.Execute(request);
+            curr = JObject.Parse(response.Content)["currency"] as JArray;
+
+
             InitializeComponent();
         }
 
-
-
+        private void translate(JToken vacancy)
+        {
+            JToken cur = vacancy["salary"]["currency"];
+            foreach (JToken _curr in curr)
+            {
+                if(cur == _curr["code"])
+                {
+                    JToken salaryFrom = vacancy["salary"]["from"];
+                    if
+                }
+            }
+        }
 
         private async void button1_Click(object sender, EventArgs e)
         {
@@ -54,8 +73,29 @@ namespace Web_API
             for (int i = VacanciesFirstPage; i < pagesCount; i++)
             {
                 foreach (JToken vacancy in vacancies)
-                {
+                {                  
+                    JToken salaryFrom = vacancy["salary"]["from"];
+                    JToken salaryTo = vacancy["salary"]["to"];
+                    JToken salaryCurr = vacancy["salary"]["currency"];
+                    JTokenType salaryFromType = salaryFrom.Type;
+                    JTokenType salaryToType = salaryTo.Type;
+                    double salary = 0;
+                    if ((string)salaryCurr != "RUR")
+                        continue;
+                    else if (salaryFromType != JTokenType.Null && salaryToType != JTokenType.Null)
+                        salary = ((double)salaryFrom + (double)salaryTo) / 2;
+                    else if (salaryFromType == JTokenType.Null && salaryToType != JTokenType.Null)
+                        salary = (double)salaryTo;
+                    else if (salaryFromType != JTokenType.Null && salaryToType == JTokenType.Null)
+                        salary = (double)salaryFrom;
+
+
+
+
                     _listi_.__list.Add((string)vacancy["name"]);
+
+
+
 
                 }
                 int FirstPage = VacanciesFirstPage + i;
@@ -91,6 +131,31 @@ namespace Web_API
 
 
         }
+
+        private async void button2_Click(object sender, EventArgs e)
+        {
+            listProf _listi_ = new listProf();
+
+            IRestRequest request = new RestRequest(string.Format("{0}?page={1}&per_page={2}&salary={3}&only_with_salary=true", HhApiVacanciesResource, VacanciesFirstPage, VacanciesPerPage, bigSalary), Method.GET);
+            IRestResponse response = _client.Execute(request);    //RequestVacancies(VacanciesFirstPage);
+            int pagesCount = (int)JObject.Parse(response.Content)["pages"];
+            JArray vacancies = JObject.Parse(response.Content)["items"] as JArray;
+            for (int i = VacanciesFirstPage; i < pagesCount; i++)
+            {
+                foreach (JToken vacancy in vacancies)
+                {
+                   
+
+                }
+                int FirstPage = VacanciesFirstPage + i;
+                request = new RestRequest(string.Format("{0}?page={1}&per_page={2}&salary={3}&only_with_salary=true", HhApiVacanciesResource, FirstPage, VacanciesPerPage, bigSalary), Method.GET);
+                response = _client.Execute(request);
+                vacancies = JObject.Parse(response.Content)["items"] as JArray;
+            }
+
+            listBox1.DataSource = _listi_.__list;
+        }
+
 
 
     }
