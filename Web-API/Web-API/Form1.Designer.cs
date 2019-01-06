@@ -74,11 +74,11 @@
             this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Controls.Add(this.button1);
             this.tabPage1.Controls.Add(this.listBox1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 29);
+            this.tabPage1.Location = new System.Drawing.Point(4, 26);
             this.tabPage1.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPage1.Size = new System.Drawing.Size(1106, 582);
+            this.tabPage1.Size = new System.Drawing.Size(1106, 585);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Профессии >120000";
             // 
@@ -113,11 +113,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 20;
+            this.listBox1.ItemHeight = 17;
             this.listBox1.Location = new System.Drawing.Point(8, 24);
             this.listBox1.Margin = new System.Windows.Forms.Padding(4);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(688, 524);
+            this.listBox1.Size = new System.Drawing.Size(688, 514);
             this.listBox1.TabIndex = 1;
             // 
             // tabPage2
@@ -126,11 +126,11 @@
             this.tabPage2.Controls.Add(this.label2);
             this.tabPage2.Controls.Add(this.button2);
             this.tabPage2.Controls.Add(this.listBox2);
-            this.tabPage2.Location = new System.Drawing.Point(4, 29);
+            this.tabPage2.Location = new System.Drawing.Point(4, 26);
             this.tabPage2.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPage2.Size = new System.Drawing.Size(1106, 582);
+            this.tabPage2.Size = new System.Drawing.Size(1106, 585);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Навыки >120000";
             // 
@@ -157,6 +157,7 @@
             this.button2.TabIndex = 2;
             this.button2.Text = "Получить";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // listBox2
             // 
@@ -164,11 +165,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listBox2.FormattingEnabled = true;
-            this.listBox2.ItemHeight = 20;
+            this.listBox2.ItemHeight = 17;
             this.listBox2.Location = new System.Drawing.Point(8, 24);
             this.listBox2.Margin = new System.Windows.Forms.Padding(4);
             this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(688, 524);
+            this.listBox2.Size = new System.Drawing.Size(688, 514);
             this.listBox2.TabIndex = 1;
             // 
             // tabPage3
@@ -177,11 +178,11 @@
             this.tabPage3.Controls.Add(this.label3);
             this.tabPage3.Controls.Add(this.button3);
             this.tabPage3.Controls.Add(this.listBox3);
-            this.tabPage3.Location = new System.Drawing.Point(4, 29);
+            this.tabPage3.Location = new System.Drawing.Point(4, 26);
             this.tabPage3.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPage3.Size = new System.Drawing.Size(1106, 582);
+            this.tabPage3.Size = new System.Drawing.Size(1106, 585);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Профессии <15000";
             // 
@@ -214,11 +215,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listBox3.FormattingEnabled = true;
-            this.listBox3.ItemHeight = 20;
+            this.listBox3.ItemHeight = 17;
             this.listBox3.Location = new System.Drawing.Point(8, 24);
             this.listBox3.Margin = new System.Windows.Forms.Padding(4);
             this.listBox3.Name = "listBox3";
-            this.listBox3.Size = new System.Drawing.Size(688, 524);
+            this.listBox3.Size = new System.Drawing.Size(688, 514);
             this.listBox3.TabIndex = 1;
             // 
             // tabPage4
@@ -227,11 +228,11 @@
             this.tabPage4.Controls.Add(this.label4);
             this.tabPage4.Controls.Add(this.button4);
             this.tabPage4.Controls.Add(this.listBox4);
-            this.tabPage4.Location = new System.Drawing.Point(4, 29);
+            this.tabPage4.Location = new System.Drawing.Point(4, 26);
             this.tabPage4.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPage4.Size = new System.Drawing.Size(1106, 582);
+            this.tabPage4.Size = new System.Drawing.Size(1106, 585);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Навыки <15000";
             // 
@@ -265,16 +266,16 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listBox4.FormattingEnabled = true;
-            this.listBox4.ItemHeight = 20;
+            this.listBox4.ItemHeight = 17;
             this.listBox4.Location = new System.Drawing.Point(8, 24);
             this.listBox4.Margin = new System.Windows.Forms.Padding(4);
             this.listBox4.Name = "listBox4";
-            this.listBox4.Size = new System.Drawing.Size(688, 524);
+            this.listBox4.Size = new System.Drawing.Size(688, 514);
             this.listBox4.TabIndex = 1;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1144, 645);
             this.Controls.Add(this.tabControl1);
