@@ -30,6 +30,10 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.labelCountClear1 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.labelCount1 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.listBox1 = new System.Windows.Forms.ListBox();
@@ -45,6 +49,18 @@
             this.label4 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
             this.listBox4 = new System.Windows.Forms.ListBox();
+            this.labelCountClear2 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.labelCount2 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.labelCountClear3 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.labelCount3 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.labelCountClear4 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.labelCount4 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -71,6 +87,10 @@
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage1.Controls.Add(this.labelCountClear1);
+            this.tabPage1.Controls.Add(this.label6);
+            this.tabPage1.Controls.Add(this.labelCount1);
+            this.tabPage1.Controls.Add(this.label5);
             this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Controls.Add(this.button1);
             this.tabPage1.Controls.Add(this.listBox1);
@@ -81,6 +101,46 @@
             this.tabPage1.Size = new System.Drawing.Size(1106, 585);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Профессии >120000";
+            // 
+            // labelCountClear1
+            // 
+            this.labelCountClear1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelCountClear1.AutoSize = true;
+            this.labelCountClear1.Location = new System.Drawing.Point(407, 525);
+            this.labelCountClear1.Name = "labelCountClear1";
+            this.labelCountClear1.Size = new System.Drawing.Size(16, 17);
+            this.labelCountClear1.TabIndex = 7;
+            this.labelCountClear1.Text = "0";
+            // 
+            // label6
+            // 
+            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(201, 525);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(200, 17);
+            this.label6.TabIndex = 6;
+            this.label6.Text = "После удаления дубликатов:";
+            // 
+            // labelCount1
+            // 
+            this.labelCount1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelCount1.AutoSize = true;
+            this.labelCount1.Location = new System.Drawing.Point(103, 525);
+            this.labelCount1.Name = "labelCount1";
+            this.labelCount1.Size = new System.Drawing.Size(16, 17);
+            this.labelCount1.TabIndex = 5;
+            this.labelCount1.Text = "0";
+            // 
+            // label5
+            // 
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(7, 525);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(90, 17);
+            this.label5.TabIndex = 4;
+            this.label5.Text = "Количество:";
             // 
             // label1
             // 
@@ -117,12 +177,16 @@
             this.listBox1.Location = new System.Drawing.Point(8, 24);
             this.listBox1.Margin = new System.Windows.Forms.Padding(4);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(688, 514);
+            this.listBox1.Size = new System.Drawing.Size(688, 497);
             this.listBox1.TabIndex = 1;
             // 
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage2.Controls.Add(this.labelCountClear2);
+            this.tabPage2.Controls.Add(this.label8);
+            this.tabPage2.Controls.Add(this.labelCount2);
+            this.tabPage2.Controls.Add(this.label10);
             this.tabPage2.Controls.Add(this.label2);
             this.tabPage2.Controls.Add(this.button2);
             this.tabPage2.Controls.Add(this.listBox2);
@@ -169,12 +233,16 @@
             this.listBox2.Location = new System.Drawing.Point(8, 24);
             this.listBox2.Margin = new System.Windows.Forms.Padding(4);
             this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(688, 514);
+            this.listBox2.Size = new System.Drawing.Size(688, 497);
             this.listBox2.TabIndex = 1;
             // 
             // tabPage3
             // 
             this.tabPage3.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage3.Controls.Add(this.labelCountClear3);
+            this.tabPage3.Controls.Add(this.label12);
+            this.tabPage3.Controls.Add(this.labelCount3);
+            this.tabPage3.Controls.Add(this.label14);
             this.tabPage3.Controls.Add(this.label3);
             this.tabPage3.Controls.Add(this.button3);
             this.tabPage3.Controls.Add(this.listBox3);
@@ -220,12 +288,16 @@
             this.listBox3.Location = new System.Drawing.Point(8, 24);
             this.listBox3.Margin = new System.Windows.Forms.Padding(4);
             this.listBox3.Name = "listBox3";
-            this.listBox3.Size = new System.Drawing.Size(688, 514);
+            this.listBox3.Size = new System.Drawing.Size(688, 497);
             this.listBox3.TabIndex = 1;
             // 
             // tabPage4
             // 
             this.tabPage4.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage4.Controls.Add(this.labelCountClear4);
+            this.tabPage4.Controls.Add(this.label16);
+            this.tabPage4.Controls.Add(this.labelCount4);
+            this.tabPage4.Controls.Add(this.label18);
             this.tabPage4.Controls.Add(this.label4);
             this.tabPage4.Controls.Add(this.button4);
             this.tabPage4.Controls.Add(this.listBox4);
@@ -272,8 +344,128 @@
             this.listBox4.Location = new System.Drawing.Point(8, 24);
             this.listBox4.Margin = new System.Windows.Forms.Padding(4);
             this.listBox4.Name = "listBox4";
-            this.listBox4.Size = new System.Drawing.Size(688, 514);
+            this.listBox4.Size = new System.Drawing.Size(688, 497);
             this.listBox4.TabIndex = 1;
+            // 
+            // labelCountClear2
+            // 
+            this.labelCountClear2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelCountClear2.AutoSize = true;
+            this.labelCountClear2.Location = new System.Drawing.Point(407, 525);
+            this.labelCountClear2.Name = "labelCountClear2";
+            this.labelCountClear2.Size = new System.Drawing.Size(16, 17);
+            this.labelCountClear2.TabIndex = 11;
+            this.labelCountClear2.Text = "0";
+            // 
+            // label8
+            // 
+            this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(201, 525);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(200, 17);
+            this.label8.TabIndex = 10;
+            this.label8.Text = "После удаления дубликатов:";
+            // 
+            // labelCount2
+            // 
+            this.labelCount2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelCount2.AutoSize = true;
+            this.labelCount2.Location = new System.Drawing.Point(103, 525);
+            this.labelCount2.Name = "labelCount2";
+            this.labelCount2.Size = new System.Drawing.Size(16, 17);
+            this.labelCount2.TabIndex = 9;
+            this.labelCount2.Text = "0";
+            // 
+            // label10
+            // 
+            this.label10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(7, 525);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(90, 17);
+            this.label10.TabIndex = 8;
+            this.label10.Text = "Количество:";
+            // 
+            // labelCountClear3
+            // 
+            this.labelCountClear3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelCountClear3.AutoSize = true;
+            this.labelCountClear3.Location = new System.Drawing.Point(407, 525);
+            this.labelCountClear3.Name = "labelCountClear3";
+            this.labelCountClear3.Size = new System.Drawing.Size(16, 17);
+            this.labelCountClear3.TabIndex = 11;
+            this.labelCountClear3.Text = "0";
+            // 
+            // label12
+            // 
+            this.label12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(201, 525);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(200, 17);
+            this.label12.TabIndex = 10;
+            this.label12.Text = "После удаления дубликатов:";
+            // 
+            // labelCount3
+            // 
+            this.labelCount3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelCount3.AutoSize = true;
+            this.labelCount3.Location = new System.Drawing.Point(103, 525);
+            this.labelCount3.Name = "labelCount3";
+            this.labelCount3.Size = new System.Drawing.Size(16, 17);
+            this.labelCount3.TabIndex = 9;
+            this.labelCount3.Text = "0";
+            // 
+            // label14
+            // 
+            this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(7, 525);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(90, 17);
+            this.label14.TabIndex = 8;
+            this.label14.Text = "Количество:";
+            // 
+            // labelCountClear4
+            // 
+            this.labelCountClear4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelCountClear4.AutoSize = true;
+            this.labelCountClear4.Location = new System.Drawing.Point(407, 525);
+            this.labelCountClear4.Name = "labelCountClear4";
+            this.labelCountClear4.Size = new System.Drawing.Size(16, 17);
+            this.labelCountClear4.TabIndex = 11;
+            this.labelCountClear4.Text = "0";
+            // 
+            // label16
+            // 
+            this.label16.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(201, 525);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(200, 17);
+            this.label16.TabIndex = 10;
+            this.label16.Text = "После удаления дубликатов:";
+            // 
+            // labelCount4
+            // 
+            this.labelCount4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelCount4.AutoSize = true;
+            this.labelCount4.Location = new System.Drawing.Point(103, 525);
+            this.labelCount4.Name = "labelCount4";
+            this.labelCount4.Size = new System.Drawing.Size(16, 17);
+            this.labelCount4.TabIndex = 9;
+            this.labelCount4.Text = "0";
+            // 
+            // label18
+            // 
+            this.label18.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(7, 525);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(90, 17);
+            this.label18.TabIndex = 8;
+            this.label18.Text = "Количество:";
             // 
             // Form1
             // 
@@ -287,9 +479,13 @@
             this.Text = "Form1";
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -313,6 +509,22 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.ListBox listBox4;
+        private System.Windows.Forms.Label labelCount1;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label labelCountClear1;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label labelCountClear2;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label labelCount2;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label labelCountClear3;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label labelCount3;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label labelCountClear4;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label labelCount4;
+        private System.Windows.Forms.Label label18;
     }
 }
 

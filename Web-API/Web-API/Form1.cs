@@ -77,26 +77,24 @@ namespace Web_API
         private List<string> RABOTAY_BLE(bool big_salary, bool details)
         {
             IRestRequest request;
-
-
-
-
+            int pagesCount = 1;
+            int FirstPage = 0;
             List<string> listProf = new List<string>();
 
 
-            if (big_salary)
+            do
             {
-                 request = new RestRequest(string.Format("{0}?page={1}&per_page={2}&salary={3}&only_with_salary=true", HhApiVacanciesResource, VacanciesFirstPage, VacanciesPerPage, bigSalary), Method.GET);
-            }
-            else
-            {
-                 request = new RestRequest(string.Format("{0}?page={1}&per_page={2}&only_with_salary=true", HhApiVacanciesResource, VacanciesFirstPage, VacanciesPerPage), Method.GET);
-            }
-            IRestResponse response = _client.Execute(request);   
-            int pagesCount = (int)JObject.Parse(response.Content)["pages"];
-            JArray vacancies = JObject.Parse(response.Content)["items"] as JArray;
-            for (int i = VacanciesFirstPage; i < pagesCount; i++)
-            {
+                if (big_salary)
+                {
+                    request = new RestRequest(string.Format("{0}?page={1}&per_page={2}&salary={3}&only_with_salary=true", HhApiVacanciesResource, FirstPage, VacanciesPerPage, bigSalary), Method.GET);
+                }
+                else
+                {
+                    request = new RestRequest(string.Format("{0}?page={1}&per_page={2}&only_with_salary=true", HhApiVacanciesResource, FirstPage, VacanciesPerPage), Method.GET);
+                }
+                IRestResponse response = _client.Execute(request);
+                pagesCount = (int)JObject.Parse(response.Content)["pages"];
+                JArray vacancies = JObject.Parse(response.Content)["items"] as JArray;
                 foreach (JToken vacancy in vacancies)
                 {
                     JToken salaryCurr = vacancy["salary"]["currency"];
@@ -111,12 +109,12 @@ namespace Web_API
 
                         if (big_salary && salary >= bigSalary)
                             listProf.Add((string)vacancy["name"]);
-                        else if (!big_salary && salary <lowSalary && salary >0)
+                        else if (!big_salary && salary < lowSalary && salary > 0)
                             listProf.Add((string)vacancy["name"]);
                     }
                     else
                     {
-                        if ((big_salary && salary >= bigSalary) || (!big_salary && salary < lowSalary && salary >0))
+                        if ((big_salary && salary >= bigSalary) || (!big_salary && salary < lowSalary && salary > 0))
                         {
                             IRestRequest request_details = new RestRequest(string.Format("{0}/{1}", HhApiVacanciesResource, (string)vacancy["id"]), Method.GET);
                             IRestResponse response_details = _client.Execute(request_details);
@@ -133,26 +131,24 @@ namespace Web_API
                         }
                     }
                 }
-                int FirstPage = VacanciesFirstPage + i;
-                if (big_salary)
-                {
-                    request = new RestRequest(string.Format("{0}?page={1}&per_page={2}&salary={3}&only_with_salary=true", HhApiVacanciesResource, FirstPage, VacanciesPerPage, bigSalary), Method.GET);
-                }
-                else
-                {
-                    request = new RestRequest(string.Format("{0}?page={1}&per_page={2}&only_with_salary=true", HhApiVacanciesResource, FirstPage, VacanciesPerPage), Method.GET);
-                }
-                response = _client.Execute(request);
-                vacancies = JObject.Parse(response.Content)["items"] as JArray;
-            }
+                FirstPage += 1;
+            } while (FirstPage < pagesCount);
             return listProf;
         }
 
+        private void ShowOnForm(List<string> data, ListBox listBox, Label labelCount, Label labelCountClear)
+        {
+            labelCount.Text = data.Count.ToString();
+            data = data.Distinct().ToList();
+            labelCountClear.Text = data.Count.ToString();
+            listBox.DataSource = data;
+        }
 
         private async void button1_Click(object sender, EventArgs e)
         {
-
-            listBox1.DataSource = RABOTAY_BLE(true,false).Distinct().ToList();
+            List<string> data = RABOTAY_BLE(true, false).ToList();
+            ShowOnForm(data, listBox1, labelCount1, labelCountClear1);
+            
             /*
             //listProf _listi_ = new listProf();
             List<string> listProf = new List<string>();
@@ -189,7 +185,8 @@ namespace Web_API
 
         private async void button2_Click(object sender, EventArgs e)
         {
-            listBox2.DataSource = RABOTAY_BLE(true,true).Distinct().ToList();
+            List<string> data = RABOTAY_BLE(true,true).Distinct().ToList();
+            ShowOnForm(data, listBox2, labelCount2, labelCountClear2);
             /*
             List<string> listProf = new List<string>(); 
 
@@ -239,7 +236,8 @@ namespace Web_API
         private void button3_Click(object sender, EventArgs e)
         {
 
-            listBox3.DataSource = RABOTAY_BLE(false,false).Distinct().ToList();
+            List<string> data = RABOTAY_BLE(false,false).Distinct().ToList();
+            ShowOnForm(data, listBox3, labelCount3, labelCountClear3);
             /*
             List<string> listProf = new List<string>();
 
@@ -276,7 +274,8 @@ namespace Web_API
         private void button4_Click(object sender, EventArgs e)
         {
 
-            listBox4.DataSource = RABOTAY_BLE(false, true).Distinct().ToList();
+            List<string> data = RABOTAY_BLE(false, true).Distinct().ToList();
+            ShowOnForm(data, listBox4, labelCount4, labelCountClear4);
             /*
             List<string> listProf = new List<string>();
 
