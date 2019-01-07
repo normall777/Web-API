@@ -185,7 +185,7 @@ namespace Web_API
 
         private async void button2_Click(object sender, EventArgs e)
         {
-            List<string> data = RABOTAY_BLE(true,true).Distinct().ToList();
+            List<string> data = RABOTAY_BLE(true, true).ToList();
             ShowOnForm(data, listBox2, labelCount2, labelCountClear2);
             /*
             List<string> listProf = new List<string>(); 
@@ -236,7 +236,7 @@ namespace Web_API
         private void button3_Click(object sender, EventArgs e)
         {
 
-            List<string> data = RABOTAY_BLE(false,false).Distinct().ToList();
+            List<string> data = RABOTAY_BLE(false,false).ToList();
             ShowOnForm(data, listBox3, labelCount3, labelCountClear3);
             /*
             List<string> listProf = new List<string>();
@@ -274,7 +274,7 @@ namespace Web_API
         private void button4_Click(object sender, EventArgs e)
         {
 
-            List<string> data = RABOTAY_BLE(false, true).Distinct().ToList();
+            List<string> data = RABOTAY_BLE(false, true).ToList();
             ShowOnForm(data, listBox4, labelCount4, labelCountClear4);
             /*
             List<string> listProf = new List<string>();
