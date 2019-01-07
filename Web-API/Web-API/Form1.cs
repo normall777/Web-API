@@ -148,9 +148,11 @@ namespace Web_API
             return listProf;
         }
 
+
         private async void button1_Click(object sender, EventArgs e)
         {
-            listBox1.DataSource = RABOTAY_BLE(true,false);
+
+            listBox1.DataSource = RABOTAY_BLE(true,false).Distinct().ToList();
             /*
             //listProf _listi_ = new listProf();
             List<string> listProf = new List<string>();
@@ -187,7 +189,7 @@ namespace Web_API
 
         private async void button2_Click(object sender, EventArgs e)
         {
-            listBox2.DataSource = RABOTAY_BLE(true,true);
+            listBox2.DataSource = RABOTAY_BLE(true,true).Distinct().ToList();
             /*
             List<string> listProf = new List<string>(); 
 
@@ -237,7 +239,7 @@ namespace Web_API
         private void button3_Click(object sender, EventArgs e)
         {
 
-            listBox3.DataSource = RABOTAY_BLE(false,false);
+            listBox3.DataSource = RABOTAY_BLE(false,false).Distinct().ToList();
             /*
             List<string> listProf = new List<string>();
 
@@ -274,7 +276,7 @@ namespace Web_API
         private void button4_Click(object sender, EventArgs e)
         {
 
-            listBox4.DataSource = RABOTAY_BLE(false, true);
+            listBox4.DataSource = RABOTAY_BLE(false, true).Distinct().ToList();
             /*
             List<string> listProf = new List<string>();
 
