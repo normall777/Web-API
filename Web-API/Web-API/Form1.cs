@@ -30,7 +30,6 @@ namespace Web_API
 
         public Form1()
         {
-
             /// <summary>
             /// Для загрузки значения для перевода валют
             /// </summary>
@@ -86,6 +85,9 @@ namespace Web_API
         /// <returns></returns>
         private List<string> GetInformation(bool flagBigSalary, bool flagDetails)
         {
+            Form formWait = new FormWait();
+            formWait.StartPosition = FormStartPosition.CenterParent;
+            formWait.Show(this);
             IRestRequest request;
             int pagesCount = 0;
             int FirstPage = 0;
@@ -145,6 +147,7 @@ namespace Web_API
                 }
                 FirstPage += 1;
             } while (FirstPage < pagesCount);
+            formWait.Hide();
             return listProf;
         }
         /// <summary>
