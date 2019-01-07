@@ -42,22 +42,20 @@ namespace Web_API
             InitializeComponent();
         }
         /// <summary>
-        /// Функция перевода иностранной валюты в RUR
+        /// Функция возвращает коэффициент для перевода Salary в RUB
         /// </summary>
         /// <param name="vacancy"></param>
         /// <returns></returns>
-        private double translate(JToken vacancy)
+        private double TranslateRate(JToken currency)
         {
-            JToken cur = vacancy["salary"]["currency"];
-            double salary = 0;
             foreach (JToken _curr in curr)
             {
-                if(cur == _curr["code"])
+                if((string)currency == (string)_curr["code"])
                 {
-                    return salary = sumSalary(vacancy, (double)_curr["rate"]);           
+                    return (double)_curr["rate"];           
                 }
             }
-            return salary;
+            throw new KeyNotFoundException();
         }
         /// <summary>
         /// Функция для получения "фактического" значения зарплаты
@@ -65,7 +63,7 @@ namespace Web_API
         /// <param name="vacancy"></param>
         /// <param name="rate"></param>
         /// <returns></returns>
-        private double sumSalary (JToken vacancy, double rate = 1)
+        private double SumSalary (JToken vacancy, double rate = 1)
         {
             double salary = 0;
             JToken salaryFrom = vacancy["salary"]["from"];
@@ -73,29 +71,30 @@ namespace Web_API
             JTokenType salaryFromType = salaryFrom.Type;
             JTokenType salaryToType = salaryTo.Type;
             if (salaryFromType != JTokenType.Null && salaryToType != JTokenType.Null)
-                salary = (((double)salaryFrom + (double)salaryTo) / 2) / rate;
+                salary = (((double)salaryFrom + (double)salaryTo) / 2) / rate; //Расчет среднего, если указано от и до
             else if (salaryFromType == JTokenType.Null && salaryToType != JTokenType.Null)
-                salary = (double)salaryTo / rate;
+                salary = (double)salaryTo / rate; //Указано до
             else if (salaryFromType != JTokenType.Null && salaryToType == JTokenType.Null)
-                salary = (double)salaryFrom / rate;
+                salary = (double)salaryFrom / rate; //Указано от
             return salary;
         }
         /// <summary>
         /// Функция для выполнения API-запросов
         /// </summary>
-        /// <param name="big_salary"></param> Флаг для поиска 120000
-        /// <param name="details"></param> Флаг для поиска ключевых навыков
+        /// <param name="flagBigSalary"></param> Флаг для поиска 120000
+        /// <param name="flagDetails"></param> Флаг для поиска ключевых навыков
         /// <returns></returns>
-        private List<string> RABOTAY_BLE(bool big_salary, bool details)
+        private List<string> GetInformation(bool flagBigSalary, bool flagDetails)
         {
             IRestRequest request;
-            int pagesCount = 1;
+            int pagesCount = 0;
             int FirstPage = 0;
             List<string> listProf = new List<string>();
             do
             {
-                if (big_salary)
-                {
+                //Строится запрос
+                if (flagBigSalary) // При указании salary сервис отдает предложения для такой суммы, без указания - все предложения
+                { 
                     request = new RestRequest(string.Format("{0}?page={1}&per_page={2}&salary={3}&only_with_salary=true", HhApiVacanciesResource, FirstPage, VacanciesPerPage, bigSalary), Method.GET);
                 }
                 else
@@ -103,28 +102,31 @@ namespace Web_API
                     request = new RestRequest(string.Format("{0}?page={1}&per_page={2}&only_with_salary=true", HhApiVacanciesResource, FirstPage, VacanciesPerPage), Method.GET);
                 }
                 IRestResponse response = _client.Execute(request);
-                pagesCount = (int)JObject.Parse(response.Content)["pages"];
-                JArray vacancies = JObject.Parse(response.Content)["items"] as JArray;
-                foreach (JToken vacancy in vacancies)
+                pagesCount = (int)JObject.Parse(response.Content)["pages"]; // Количество страниц всего
+                JArray vacancies = JObject.Parse(response.Content)["items"] as JArray; //Получение массива вакансий
+                foreach (JToken vacancy in vacancies) //Обработка каждой вакансии из массива
                 {
-                    JToken salaryCurr = vacancy["salary"]["currency"];
-
+                    JToken salaryCurr = vacancy["salary"]["currency"];//Считывание валюты
+                    double rate = 1;
                     double salary = 0;
-                    if ((string)salaryCurr != "RUR")
-                        salary = translate(vacancy);
-                    else
-                        salary = sumSalary(vacancy);
-                    if (!details)
+                    if ((string)salaryCurr != "RUR") //Если не рубли, то нужно перевести в рубли, т.е. посчитать коэффициент перевода rate
                     {
+                        rate = TranslateRate(salaryCurr);
+                    }
 
-                        if (big_salary && salary >= bigSalary)
+                    salary = SumSalary(vacancy, rate);
+
+                    if (!flagDetails) 
+                    {
+                        // Если интересуют профессии
+                        if (flagBigSalary && salary >= bigSalary)
                             listProf.Add((string)vacancy["name"]);
-                        else if (!big_salary && salary < lowSalary && salary > 0)
+                        else if (!flagBigSalary && salary < lowSalary && salary > 0)
                             listProf.Add((string)vacancy["name"]);
                     }
-                    else
+                    else // Если интересуют ключевые навыки
                     {
-                        if ((big_salary && salary >= bigSalary) || (!big_salary && salary < lowSalary && salary > 0))
+                        if ((flagBigSalary && salary >= bigSalary) || (!flagBigSalary && salary < lowSalary && salary > 0))
                         {
                             IRestRequest request_details = new RestRequest(string.Format("{0}/{1}", HhApiVacanciesResource, (string)vacancy["id"]), Method.GET);
                             IRestResponse response_details = _client.Execute(request_details);
@@ -167,27 +169,25 @@ namespace Web_API
         /// </summary>
         private async void button1_Click(object sender, EventArgs e)
         {
-            List<string> data = RABOTAY_BLE(true, false).ToList();
+            List<string> data = GetInformation(true, false).ToList();
             ShowOnForm(data, listBox1, labelCount1, labelCountClear1);          
         }
 
         private async void button2_Click(object sender, EventArgs e)
         {
-            List<string> data = RABOTAY_BLE(true, true).ToList();
+            List<string> data = GetInformation(true, true).ToList();
             ShowOnForm(data, listBox2, labelCount2, labelCountClear2);
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-
-            List<string> data = RABOTAY_BLE(false,false).ToList();
+            List<string> data = GetInformation(false,false).ToList();
             ShowOnForm(data, listBox3, labelCount3, labelCountClear3);
-            }
+        }
 
         private void button4_Click(object sender, EventArgs e)
         {
-
-            List<string> data = RABOTAY_BLE(false, true).ToList();
+            List<string> data = GetInformation(false, true).ToList();
             ShowOnForm(data, listBox4, labelCount4, labelCountClear4);          
         }
     }
