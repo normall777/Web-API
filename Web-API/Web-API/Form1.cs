@@ -41,7 +41,11 @@ namespace Web_API
 
             InitializeComponent();
         }
-
+        /// <summary>
+        /// Функция перевода иностранной валюты в RUR
+        /// </summary>
+        /// <param name="vacancy"></param>
+        /// <returns></returns>
         private double translate(JToken vacancy)
         {
             JToken cur = vacancy["salary"]["currency"];
@@ -55,6 +59,12 @@ namespace Web_API
             }
             return salary;
         }
+        /// <summary>
+        /// Функция для получения "фактического" значения зарплаты
+        /// </summary>
+        /// <param name="vacancy"></param>
+        /// <param name="rate"></param>
+        /// <returns></returns>
         private double sumSalary (JToken vacancy, double rate = 1)
         {
             double salary = 0;
@@ -70,18 +80,18 @@ namespace Web_API
                 salary = (double)salaryFrom / rate;
             return salary;
         }
-
-
-
-
+        /// <summary>
+        /// Функция для выполнения API-запросов
+        /// </summary>
+        /// <param name="big_salary"></param> Флаг для поиска 120000
+        /// <param name="details"></param> Флаг для поиска ключевых навыков
+        /// <returns></returns>
         private List<string> RABOTAY_BLE(bool big_salary, bool details)
         {
             IRestRequest request;
             int pagesCount = 1;
             int FirstPage = 0;
             List<string> listProf = new List<string>();
-
-
             do
             {
                 if (big_salary)
@@ -135,7 +145,13 @@ namespace Web_API
             } while (FirstPage < pagesCount);
             return listProf;
         }
-
+        /// <summary>
+        /// Функция выводы результатов на форму
+        /// </summary>
+        /// <param name="data"></param> Набор данных для вывода
+        /// <param name="listBox"></param> Окно (listbox) для вывода
+        /// <param name="labelCount"></param> Параметр чилса найденных результатов
+        /// <param name="labelCountClear"></param> Число найденных различающихся результатов
         private void ShowOnForm(List<string> data, ListBox listBox, Label labelCount, Label labelCountClear)
         {
             labelCount.Text = data.Count.ToString();
@@ -143,187 +159,34 @@ namespace Web_API
             labelCountClear.Text = data.Count.ToString();
             listBox.DataSource = data;
         }
-
+        /// <summary>
+        /// Вызов функций при нажатии на кнопки:
+        /// вызов функции запроса
+        /// и
+        /// вызов функции отображения
+        /// </summary>
         private async void button1_Click(object sender, EventArgs e)
         {
             List<string> data = RABOTAY_BLE(true, false).ToList();
-            ShowOnForm(data, listBox1, labelCount1, labelCountClear1);
-            
-            /*
-            //listProf _listi_ = new listProf();
-            List<string> listProf = new List<string>();
-
-            IRestRequest request = new RestRequest(string.Format("{0}?page={1}&per_page={2}&salary={3}&only_with_salary=true", HhApiVacanciesResource, VacanciesFirstPage, VacanciesPerPage, bigSalary), Method.GET);
-            IRestResponse response = _client.Execute(request);    //RequestVacancies(VacanciesFirstPage);
-            int pagesCount = (int)JObject.Parse(response.Content)["pages"];
-            JArray vacancies = JObject.Parse(response.Content)["items"] as JArray;
-            for (int i = VacanciesFirstPage; i < pagesCount; i++)
-            {
-                foreach (JToken vacancy in vacancies)
-                {                                      
-                    JToken salaryCurr = vacancy["salary"]["currency"];
-
-                    double salary = 0;
-                    if ((string)salaryCurr != "RUR")
-                        salary = translate(vacancy);
-                    else
-                        salary = sumSalary(vacancy);
-
-                    if (salary > bigSalary)
-                        listProf.Add((string)vacancy["name"]);
-
-                }
-                int FirstPage = VacanciesFirstPage + i;
-                request = new RestRequest(string.Format("{0}?page={1}&per_page={2}&salary={3}&only_with_salary=true", HhApiVacanciesResource, FirstPage, VacanciesPerPage, bigSalary), Method.GET);
-                response = _client.Execute(request);
-                vacancies = JObject.Parse(response.Content)["items"] as JArray;
-            }
-
-            listBox1.DataSource = listProf;
-            */
+            ShowOnForm(data, listBox1, labelCount1, labelCountClear1);          
         }
 
         private async void button2_Click(object sender, EventArgs e)
         {
             List<string> data = RABOTAY_BLE(true,true).Distinct().ToList();
             ShowOnForm(data, listBox2, labelCount2, labelCountClear2);
-            /*
-            List<string> listProf = new List<string>(); 
-
-            IRestRequest request = new RestRequest(string.Format("{0}?page={1}&per_page={2}&salary={3}&only_with_salary=true", HhApiVacanciesResource, VacanciesFirstPage, VacanciesPerPage, bigSalary), Method.GET);
-            IRestResponse response = _client.Execute(request);    //RequestVacancies(VacanciesFirstPage);
-            int pagesCount = (int)JObject.Parse(response.Content)["pages"];
-            JArray vacancies = JObject.Parse(response.Content)["items"] as JArray;
-            for (int i = VacanciesFirstPage; i < pagesCount; i++)
-            {
-                foreach (JToken vacancy in vacancies)
-                {
-                    JToken salaryCurr = vacancy["salary"]["currency"];
-
-                    double salary = 0;
-                    if ((string)salaryCurr != "RUR")
-                        salary = translate(vacancy);
-                    else
-                        salary = sumSalary(vacancy);
-
-                    if (salary > bigSalary)
-                    {
-                        IRestRequest request_details = new RestRequest(string.Format("{0}/{1}", HhApiVacanciesResource, (string)vacancy["id"]), Method.GET);
-                        IRestResponse response_details = _client.Execute(request_details);
-
-                        JToken vacancyDetails = JObject.Parse(response_details.Content); //     (RequestVacancyDetails((string)vacancy["id"]).Content);
-                        JArray keySkills = vacancyDetails["key_skills"] as JArray;
-                        if (keySkills.HasValues)
-                        {
-                            foreach (JToken keySkill in keySkills)
-                            {
-                                listProf.Add((string)keySkill["name"]);
-                            }
-                        }
-                        
-                    }
-                }
-                int FirstPage = VacanciesFirstPage + i;
-                request = new RestRequest(string.Format("{0}?page={1}&per_page={2}&salary={3}&only_with_salary=true", HhApiVacanciesResource, FirstPage, VacanciesPerPage, bigSalary), Method.GET);
-                response = _client.Execute(request);
-                vacancies = JObject.Parse(response.Content)["items"] as JArray;
-            }
-
-            listBox2.DataSource = listProf;
-            */
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-
             List<string> data = RABOTAY_BLE(false,false).Distinct().ToList();
             ShowOnForm(data, listBox3, labelCount3, labelCountClear3);
-            /*
-            List<string> listProf = new List<string>();
-
-            IRestRequest request = new RestRequest(string.Format("{0}?page={1}&per_page={2}&only_with_salary=true", HhApiVacanciesResource, VacanciesFirstPage, VacanciesPerPage), Method.GET);
-            IRestResponse response = _client.Execute(request);    //RequestVacancies(VacanciesFirstPage);
-            int pagesCount = (int)JObject.Parse(response.Content)["pages"];
-            JArray vacancies = JObject.Parse(response.Content)["items"] as JArray;
-            for (int i = VacanciesFirstPage; i < pagesCount; i++)
-            {
-                foreach (JToken vacancy in vacancies)
-                {
-                    JToken salaryCurr = vacancy["salary"]["currency"];
-
-                    double salary = 0;
-                    if ((string)salaryCurr != "RUR")
-                        salary = translate(vacancy);
-                    else
-                        salary = sumSalary(vacancy);
-
-                    if (salary < lowSalary&&salary>0)
-                        listProf.Add((string)vacancy["name"]);
-
-                }
-                int FirstPage = VacanciesFirstPage + i;
-                request = new RestRequest(string.Format("{0}?page={1}&per_page={2}&only_with_salary=true", HhApiVacanciesResource, FirstPage, VacanciesPerPage), Method.GET);
-                response = _client.Execute(request);
-                vacancies = JObject.Parse(response.Content)["items"] as JArray;
             }
-
-            listBox3.DataSource = listProf;
-            */
-        }
 
         private void button4_Click(object sender, EventArgs e)
         {
-
             List<string> data = RABOTAY_BLE(false, true).Distinct().ToList();
-            ShowOnForm(data, listBox4, labelCount4, labelCountClear4);
-            /*
-            List<string> listProf = new List<string>();
-
-            IRestRequest request = new RestRequest(string.Format("{0}?page={1}&per_page={2}&only_with_salary=true", HhApiVacanciesResource, VacanciesFirstPage, VacanciesPerPage), Method.GET);
-            IRestResponse response = _client.Execute(request);    //RequestVacancies(VacanciesFirstPage);
-            int pagesCount = (int)JObject.Parse(response.Content)["pages"];
-            JArray vacancies = JObject.Parse(response.Content)["items"] as JArray;
-            for (int i = VacanciesFirstPage; i < pagesCount; i++)
-            {
-                foreach (JToken vacancy in vacancies)
-                {
-                    JToken salaryCurr = vacancy["salary"]["currency"];
-
-                    double salary = 0;
-                    if ((string)salaryCurr != "RUR")
-                        salary = translate(vacancy);
-                    else
-                        salary = sumSalary(vacancy);
-
-                    if (salary < lowSalary&salary>0)
-                    {
-                        IRestRequest request_details = new RestRequest(string.Format("{0}/{1}", HhApiVacanciesResource, (string)vacancy["id"]), Method.GET);
-                        IRestResponse response_details = _client.Execute(request_details);
-
-                        JToken vacancyDetails = JObject.Parse(response_details.Content); //     (RequestVacancyDetails((string)vacancy["id"]).Content);
-                        JArray keySkills = vacancyDetails["key_skills"] as JArray;
-                        if (keySkills.HasValues)
-                        {
-                            foreach (JToken keySkill in keySkills)
-                            {
-                                listProf.Add((string)keySkill["name"]);
-                            }
-                        }
-
-                    }
-
-
-
-
-                }
-                int FirstPage = VacanciesFirstPage + i;
-                request = new RestRequest(string.Format("{0}?page={1}&per_page={2}&only_with_salary=true", HhApiVacanciesResource, FirstPage, VacanciesPerPage), Method.GET);
-                response = _client.Execute(request);
-                vacancies = JObject.Parse(response.Content)["items"] as JArray;
-            }
-
-            listBox4.DataSource = listProf;
-            */
+            ShowOnForm(data, listBox4, labelCount4, labelCountClear4);           
         }
     }
 
