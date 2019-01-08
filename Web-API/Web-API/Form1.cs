@@ -26,7 +26,10 @@ namespace Web_API
         const int lowSalary = 15000;
         readonly IRestClient _client = new RestClient(HhApiHost);
         private JArray curr;
-        
+        private List<JToken> listVacancyBigSalary = new List<JToken>();
+        private List<JToken> listVacancyLowSalary = new List<JToken>();
+        Form formWait = new FormWait();
+        //formWait.StartPosition = FormStartPosition.CenterParent;
 
         public Form1()
         {
@@ -83,15 +86,13 @@ namespace Web_API
         /// <param name="flagBigSalary"></param> Флаг для поиска 120000
         /// <param name="flagDetails"></param> Флаг для поиска ключевых навыков
         /// <returns></returns>
-        private List<string> GetInformation(bool flagBigSalary, bool flagDetails)
+        private List<JToken> GetVacancy(bool flagBigSalary)
         {
-            Form formWait = new FormWait();
-            formWait.StartPosition = FormStartPosition.CenterParent;
             formWait.Show(this);
+            List<JToken> listVacancies = new List<JToken>();
             IRestRequest request;
             int pagesCount = 0;
             int FirstPage = 0;
-            List<string> listProf = new List<string>();
             do
             {
                 //Строится запрос
@@ -117,39 +118,69 @@ namespace Web_API
                     }
 
                     salary = SumSalary(vacancy, rate);
-
-                    if (!flagDetails) 
-                    {
-                        // Если интересуют профессии
-                        if (flagBigSalary && salary >= bigSalary)
-                            listProf.Add((string)vacancy["name"]);
-                        else if (!flagBigSalary && salary < lowSalary && salary > 0)
-                            listProf.Add((string)vacancy["name"]);
-                    }
-                    else // Если интересуют ключевые навыки
-                    {
-                        if ((flagBigSalary && salary >= bigSalary) || (!flagBigSalary && salary < lowSalary && salary > 0))
-                        {
-                            IRestRequest request_details = new RestRequest(string.Format("{0}/{1}", HhApiVacanciesResource, (string)vacancy["id"]), Method.GET);
-                            IRestResponse response_details = _client.Execute(request_details);
-
-                            JToken vacancyDetails = JObject.Parse(response_details.Content);
-                            JArray keySkills = vacancyDetails["key_skills"] as JArray;
-                            if (keySkills.HasValues)
-                            {
-                                foreach (JToken keySkill in keySkills)
-                                {
-                                    listProf.Add((string)keySkill["name"]);
-                                }
-                            }
-                        }
-                    }
+                    //Если подходящая salary, то добавить ее в список
+                    if (flagBigSalary && salary >= bigSalary)
+                        listVacancies.Add(vacancy);
+                    else if (!flagBigSalary && salary < lowSalary && salary > 0)
+                        listVacancies.Add(vacancy);
                 }
                 FirstPage += 1;
             } while (FirstPage < pagesCount);
             formWait.Hide();
-            return listProf;
+            return listVacancies;
         }
+        /// <summary>
+        /// Функция получения названий вакансий
+        /// </summary>
+        /// <param name="vacancies">Список вакансий</param>
+        /// <returns></returns>
+        private List<string> GetVacanciesName(List<JToken> vacancies)
+        {
+            List<string> listNames = new List<string>();
+            foreach(JToken vacancy in vacancies)
+            {
+                listNames.Add((string)vacancy["name"]);
+            }
+            return listNames;
+        }
+        /// <summary>
+        /// Функция получения ключевых навыков
+        /// </summary>
+        /// <param name="flagBigSalary">Флаг для поиска Salary больше 120000</param>
+        /// <returns></returns>
+        private List<string> GetVacanciesDetails(bool flagBigSalary)
+        {
+            List<JToken> vacancies = new List<JToken>();
+            //Если вакансии не были раньше получены, получить их
+            if (flagBigSalary == true && listVacancyBigSalary.Count == 0 || flagBigSalary==false && listVacancyLowSalary.Count==0)
+            {
+                vacancies = GetVacancy(flagBigSalary);
+                if (flagBigSalary == true) listVacancyBigSalary = vacancies; else listVacancyLowSalary = vacancies;
+            }
+            formWait.Show(this);
+            if (flagBigSalary == true) vacancies = listVacancyBigSalary; else vacancies = listVacancyLowSalary;
+            
+            //Составление списка ключевых навыков
+            List<string> listDetails = new List<string>();
+            foreach (JToken vacancy in vacancies)
+            {
+                IRestRequest request_details = new RestRequest(string.Format("{0}/{1}", HhApiVacanciesResource, (string)vacancy["id"]), Method.GET);
+                IRestResponse response_details = _client.Execute(request_details);
+
+                JToken vacancyDetails = JObject.Parse(response_details.Content);
+                JArray keySkills = vacancyDetails["key_skills"] as JArray;
+                if (keySkills.HasValues)
+                {
+                    foreach (JToken keySkill in keySkills)
+                    {
+                        listDetails.Add((string)keySkill["name"]);
+                    }
+                }
+            }
+            formWait.Hide();
+            return listDetails;
+        }
+
         /// <summary>
         /// Функция выводы результатов на форму
         /// </summary>
@@ -164,34 +195,48 @@ namespace Web_API
             labelCountClear.Text = data.Count.ToString();
             listBox.DataSource = data;
         }
+
         /// <summary>
         /// Вызов функций при нажатии на кнопки:
-        /// вызов функции запроса
+        /// вызов функции получения списка вакансий,
+        /// вызов функции получения названий вакансий или ключевых навыков
         /// и
         /// вызов функции отображения
         /// </summary>
-        private async void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            List<string> data = GetInformation(true, false).ToList();
-            ShowOnForm(data, listBox1, labelCount1, labelCountClear1);          
+            listVacancyBigSalary = GetVacancy(true).ToList();
+            List<string> data = GetVacanciesName(listVacancyBigSalary);
+            ShowOnForm(data, listBox1, labelCount1, labelCountClear1);
         }
 
-        private async void button2_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
-            List<string> data = GetInformation(true, true).ToList();
+            List<string> data = GetVacanciesDetails(true).ToList();
             ShowOnForm(data, listBox2, labelCount2, labelCountClear2);
+            if (listBox1.Items.Count == 0)
+            {
+                data = GetVacanciesName(listVacancyBigSalary);
+                ShowOnForm(data, listBox1, labelCount1, labelCountClear1);
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            List<string> data = GetInformation(false,false).ToList();
+            listVacancyLowSalary = GetVacancy(false).ToList();
+            List<string> data = GetVacanciesName(listVacancyLowSalary);
             ShowOnForm(data, listBox3, labelCount3, labelCountClear3);
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            List<string> data = GetInformation(false, true).ToList();
-            ShowOnForm(data, listBox4, labelCount4, labelCountClear4);          
+            List<string> data = GetVacanciesDetails(false).ToList();
+            ShowOnForm(data, listBox4, labelCount4, labelCountClear4);
+            if (listBox3.Items.Count == 0)
+            {
+                data = GetVacanciesName(listVacancyLowSalary);
+                ShowOnForm(data, listBox3, labelCount3, labelCountClear3);
+            }
         }
     }
 
