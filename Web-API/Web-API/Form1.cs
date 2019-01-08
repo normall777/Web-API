@@ -25,36 +25,34 @@ namespace Web_API
         const int bigSalary = 120000;
         const int lowSalary = 15000;
         readonly IRestClient _client = new RestClient(HhApiHost);
-        private JArray curr;
+        private JArray listOfCurrency;
         private List<JToken> listVacancyBigSalary = new List<JToken>();
         private List<JToken> listVacancyLowSalary = new List<JToken>();
         Form formWait = new FormWait();
-        //formWait.StartPosition = FormStartPosition.CenterParent;
 
         public Form1()
         {
             /// <summary>
-            /// Для загрузки значения для перевода валют
+            /// Для загрузки значений для перевода валют
             /// </summary>
             IRestRequest request = new RestRequest(string.Format("https://api.hh.ru/dictionaries"), Method.GET);
             IRestResponse response = _client.Execute(request);
-            curr = JObject.Parse(response.Content)["currency"] as JArray;
-
+            listOfCurrency = JObject.Parse(response.Content)["currency"] as JArray;
 
             InitializeComponent();
         }
         /// <summary>
         /// Функция возвращает коэффициент для перевода Salary в RUB
         /// </summary>
-        /// <param name="vacancy"></param>
+        /// <param name="currentCurrency">Валюта</param>
         /// <returns></returns>
-        private double TranslateRate(JToken currency)
+        private double TranslateRate(JToken currentCurrency)
         {
-            foreach (JToken _curr in curr)
+            foreach (JToken curr in listOfCurrency)
             {
-                if((string)currency == (string)_curr["code"])
+                if((string)currentCurrency == (string)curr["code"])
                 {
-                    return (double)_curr["rate"];           
+                    return (double)curr["rate"];           
                 }
             }
             throw new KeyNotFoundException();
@@ -83,8 +81,7 @@ namespace Web_API
         /// <summary>
         /// Функция для выполнения API-запросов
         /// </summary>
-        /// <param name="flagBigSalary"></param> Флаг для поиска 120000
-        /// <param name="flagDetails"></param> Флаг для поиска ключевых навыков
+        /// <param name="flagBigSalary">Флаг для поиска 120000</param> 
         /// <returns></returns>
         private List<JToken> GetVacancy(bool flagBigSalary)
         {
@@ -134,7 +131,7 @@ namespace Web_API
         /// </summary>
         /// <param name="vacancies">Список вакансий</param>
         /// <returns></returns>
-        private List<string> GetVacanciesName(List<JToken> vacancies)
+        private List<string> GetVacanciesNames(List<JToken> vacancies)
         {
             List<string> listNames = new List<string>();
             foreach(JToken vacancy in vacancies)
@@ -184,10 +181,10 @@ namespace Web_API
         /// <summary>
         /// Функция выводы результатов на форму
         /// </summary>
-        /// <param name="data"></param> Набор данных для вывода
-        /// <param name="listBox"></param> Окно (listbox) для вывода
-        /// <param name="labelCount"></param> Параметр чилса найденных результатов
-        /// <param name="labelCountClear"></param> Число найденных различающихся результатов
+        /// <param name="data">Набор данных для вывода</param> 
+        /// <param name="listBox">Окно (listbox) для вывода</param> 
+        /// <param name="labelCount">Параметр числа найденных результатов</param> 
+        /// <param name="labelCountClear">Число найденных различающихся результатов</param>
         private void ShowOnForm(List<string> data, ListBox listBox, Label labelCount, Label labelCountClear)
         {
             labelCount.Text = data.Count.ToString();
@@ -206,7 +203,7 @@ namespace Web_API
         private void button1_Click(object sender, EventArgs e)
         {
             listVacancyBigSalary = GetVacancy(true).ToList();
-            List<string> data = GetVacanciesName(listVacancyBigSalary);
+            List<string> data = GetVacanciesNames(listVacancyBigSalary);
             ShowOnForm(data, listBox1, labelCount1, labelCountClear1);
         }
 
@@ -216,7 +213,7 @@ namespace Web_API
             ShowOnForm(data, listBox2, labelCount2, labelCountClear2);
             if (listBox1.Items.Count == 0)
             {
-                data = GetVacanciesName(listVacancyBigSalary);
+                data = GetVacanciesNames(listVacancyBigSalary);
                 ShowOnForm(data, listBox1, labelCount1, labelCountClear1);
             }
         }
@@ -224,7 +221,7 @@ namespace Web_API
         private void button3_Click(object sender, EventArgs e)
         {
             listVacancyLowSalary = GetVacancy(false).ToList();
-            List<string> data = GetVacanciesName(listVacancyLowSalary);
+            List<string> data = GetVacanciesNames(listVacancyLowSalary);
             ShowOnForm(data, listBox3, labelCount3, labelCountClear3);
         }
 
@@ -234,7 +231,7 @@ namespace Web_API
             ShowOnForm(data, listBox4, labelCount4, labelCountClear4);
             if (listBox3.Items.Count == 0)
             {
-                data = GetVacanciesName(listVacancyLowSalary);
+                data = GetVacanciesNames(listVacancyLowSalary);
                 ShowOnForm(data, listBox3, labelCount3, labelCountClear3);
             }
         }
